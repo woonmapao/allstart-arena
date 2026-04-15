@@ -43,6 +43,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           resource_type: 'image', // Specify the resource type (image, video, raw)
         });
 
+        console.log(result);
+
         // Return the Cloudinary image URL
         const name = fields.name;
         const court_id = fields.court_id;
