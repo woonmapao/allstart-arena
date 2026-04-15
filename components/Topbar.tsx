@@ -18,7 +18,7 @@ const TopBar: React.FC<TopBarProps> = ({ isOpen, toggleSidebar }) => {
       <div className={styles.logo}>
         <Image src="/logo.jpg" alt="Badminton Logo" width={40} height={40} />
       </div>
-      <div className={styles.title}>All Stars Badminton</div>
+      <div className={styles.title}>Banpong Badminton</div>
     </div>
   );
 };

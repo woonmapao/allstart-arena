@@ -51,7 +51,7 @@ const Rules = ({ rules }: Props) => {
         <title>Rules</title>
       </Head>
       <div className={styles.container}>
-        <h1 className='fw-bold' style={{ textAlign: 'center', textShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)' }}>All Stars Badminton</h1>
+        <h1 className='fw-bold' style={{ textAlign: 'center', textShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)' }}>Banpong Badminton</h1>
         <div className={styles.box_content}>
           <h2 className={styles.heading}>{rules[0].title}</h2>
           <p className={styles.content}>{rules[0].content}</p>
