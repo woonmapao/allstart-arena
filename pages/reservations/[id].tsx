@@ -9,6 +9,7 @@ import { Button, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2'
 import NotFoundPage from '../404'
 import Head from 'next/head';
+import { normalizeUsedateForMysql } from '@/lib/reserveUsedate';
 interface TimeSlot {
     id: number;
     start_time: string;
@@ -160,7 +161,10 @@ function Schedule({ timeSlots, courts, timeZone }: Props,) {
             formData.append('court_id', court1!.id.toString());
             formData.append('startvalue', reservations1!.start_time);
             formData.append('endvalue', reservations1!.end_time);
-            formData.append('usedate', reservations1!.usedate);
+            const usedateForSlip =
+                normalizeUsedateForMysql(reservations1!.usedate) ??
+                format(selectedDate, 'yyyy-MM-dd');
+            formData.append('usedate', usedateForSlip);
 
 
             try {
