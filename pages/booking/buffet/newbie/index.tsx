@@ -14,6 +14,7 @@ import { SkillLevelEnum } from '@/enum/skillLevelEnum';
 import useDebounce from '@/hook/use-debounce';
 import { OptionType } from '@/components/admin/AbbreviatedSelect';
 import { ShuttleCockTypes } from '@/pages/admin/backend/booking/buffet';
+import { loadBuffetSettingsTriple } from '@/lib/loadBuffetSettingsServerSide';
 
 interface Props {
   buffetSetting: IBuffet_setting;
@@ -22,28 +23,12 @@ interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  try {
-    const response = await fetch(`${process.env.HOSTNAME}/api/buffet/newbie/get_setting`);
-    const buffetSetting = await response.json();
-    return {
-      props: {
-        buffetSetting: buffetSetting[0],
-        buffetStudentSetting: buffetSetting[1],
-        buffetUniversitySetting: buffetSetting[2],
-      },
-
-    };
-  } catch (error) {
-    console.error('Failed to fetch data:', error);
-    return {
-      props: {
-        buffetSetting: [],
-        buffetStudentSetting: [],
-        buffetUniversitySetting: [],
-      },
-    };
+  const props = await loadBuffetSettingsTriple(process.env.HOSTNAME, '/api/buffet/newbie/get_setting');
+  if (!props) {
+    return { notFound: true };
   }
-}
+  return { props };
+};
 
 export default function Page({ buffetSetting, buffetStudentSetting, buffetUniversitySetting }: Props) {
   const router = useRouter();

@@ -16,6 +16,7 @@ import { buffetPaymentStatusEnum } from '@/enum/buffetPaymentStatusEnum';
 import SaleDetailModal from '@/components/modal/saleDetailModal';
 import CustomTable from '@/components/table/customTable';
 import useDebounce from '@/hook/use-debounce';
+import { loadBuffetSettingsTriple } from '@/lib/loadBuffetSettingsServerSide';
 
 interface Props {
     buffetSetting: IBuffet_setting;
@@ -24,28 +25,12 @@ interface Props {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-    try {
-        const response = await fetch(`${process.env.HOSTNAME}/api/buffet/get_setting`);
-        const buffetSetting = await response.json();
-        return {
-            props: {
-                buffetSetting: buffetSetting[0],
-                buffetStudentSetting: buffetSetting[1],
-                buffetUniversitySetting: buffetSetting[2],
-            },
-
-        };
-    } catch (error) {
-        console.error('Failed to fetch data:', error);
-        return {
-            props: {
-                buffetSetting: [],
-                buffetStudentSetting: [],
-                buffetUniversitySetting: [],
-            },
-        };
+    const props = await loadBuffetSettingsTriple(process.env.HOSTNAME, '/api/buffet/get_setting');
+    if (!props) {
+        return { notFound: true };
     }
-}
+    return { props };
+};
 
 function Infobuffet({ buffetSetting, buffetStudentSetting, buffetUniversitySetting }: Props) {
     const [buffets, setBuffets] = useState<IBuffet[]>([]);

@@ -5,7 +5,7 @@ import pool from '@/db/db';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
     const connection = await pool.getConnection()
     try {
-        const query = 'SELECT * FROM buffet_setting_newbie';
+        const query = 'SELECT * FROM buffet_setting_newbie ORDER BY isStudent ASC';
 
         // Execute the SQL query to fetch time slots
         const [results] = await connection.query(query);
