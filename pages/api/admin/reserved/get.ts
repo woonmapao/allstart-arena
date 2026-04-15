@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/db/db';
 import { getToken } from 'next-auth/jwt';
+import { mapRowsUsedateForClient, normalizeUsedateForMysql } from '@/lib/reserveUsedate';
 
 
 
@@ -17,17 +18,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const { usedate } = req.query
       {
+        const usedateMysql = normalizeUsedateForMysql(usedate);
+        if (!usedateMysql) {
+          res.status(400).json({ message: 'Invalid usedate' });
+          return;
+        }
         const deleteReserve = `DELETE FROM reserve WHERE reserved_date < (NOW() - INTERVAL 15 MINUTE) AND status = 0;`
         await connection.query(deleteReserve);
         const query = 'SELECT id,name, court_id, time_slot_id,reserved_date, usedate ,start_time,end_time, price ,status FROM reserve WHERE usedate = ?';
-        const [reservations] = await connection.query(query, [usedate]);
-        res.json(reservations);
+        const [reservations] = await connection.query(query, [usedateMysql]);
+        res.json(mapRowsUsedateForClient(reservations as { usedate?: unknown }[]));
       }
     }
     else if (req.method === 'POST') {
       try {
 
         const { name, phone, court_id, time_slot_id, startvalue, endvalue, usedate, price } = req.body;
+        const usedateMysql = normalizeUsedateForMysql(usedate);
+        if (!usedateMysql) {
+          res.status(400).json({ message: 'Invalid usedate' });
+          return;
+        }
         const insertQuery = `
        INSERT INTO reserve (name, phone, court_id, time_slot_id, start_time, end_time, usedate, price)
        SELECT ?, ?, ?, ?, ?, ?, ?, ?
@@ -39,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     )
   )
 `;
-        const params = [name, phone, court_id, time_slot_id, startvalue, endvalue, usedate, price, court_id, usedate, startvalue, endvalue
+        const params = [name, phone, court_id, time_slot_id, startvalue, endvalue, usedateMysql, price, court_id, usedateMysql, startvalue, endvalue
         ];
         const [result] = await connection.query(insertQuery, params);
 
