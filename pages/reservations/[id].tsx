@@ -199,7 +199,8 @@ function Schedule({ timeSlots, courts, timeZone }: Props,) {
 
     const [show, setShow] = useState(false);
 
-    const [intervalId, setIntervalId] = useState<number | NodeJS.Timer>(0);
+    /** Browser `setInterval` handle (numeric in DOM typings). */
+    const [intervalId, setIntervalId] = useState<number | null>(null);
 
     const payment = (id: any) => {
         const reservation = reservations.find((r) => r.id === id);
@@ -217,13 +218,13 @@ function Schedule({ timeSlots, courts, timeZone }: Props,) {
                 setMinutesRemaining(minutesRemaining);
                 setSecondsRemaining(secondsRemaining);
                 // เริ่มการนับถอยหลังและเซ็ตค่าให้กับ state
-                const Interval = setInterval(() => {
+                const Interval = window.setInterval(() => {
                     const currentTime = new Date();
                     const remainingTime = (newTargetTime.getTime() + (900 * 1000) - currentTime.getTime());
                     const minutesRemaining = Math.floor(remainingTime / 60000);
                     const secondsRemaining = Math.floor((remainingTime % 60000) / 1000);
                     if (remainingTime < 0) {
-                        clearInterval(id);
+                        window.clearInterval(Interval);
                     }
 
                     setMinutesRemaining(minutesRemaining);
@@ -244,8 +245,9 @@ function Schedule({ timeSlots, courts, timeZone }: Props,) {
     const handleClose = () => {
         setShow(false);
         setReservations1(null);
-        if (intervalId) {
-            clearInterval(intervalId); // หยุดการนับถอยหลัง (ถ้ามี interval ที่ถูกสร้าง)
+        if (intervalId != null) {
+            window.clearInterval(intervalId); // หยุดการนับถอยหลัง (ถ้ามี interval ที่ถูกสร้าง)
+            setIntervalId(null);
         }
     };
     const showSlipImg = () => {

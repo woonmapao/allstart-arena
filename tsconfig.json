@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "ignoreDeprecations": "6.0",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -18,6 +19,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/booking/Reserve/index.tsx", "pages/upload2/index.tsx", "pages/api/upload.js", "pages/api/upload.js", "pages/upload.js", "pages/upload111.js", "pages/reservations/index.js", "pages/api/test.ts", "components/AdminSidebar.js", "pages/api/admin/holidays/delete.js", "pages/api/admin/tournament/listTournament", "pages/admin/backend/booking/buffet/test1.jsx", "pages/admin/backend/booking/buffet/test.js", "pages/admin/backend/booking/buffet/test.js", "pages/admin/backend/booking/buffet/colums.js", "pages/api/auth/[...nextauth].js", "pages/admin/backend/booking/buffet/columsLeft.tsx", "pages/api/admin/dailySum", "dev.js"],
+  "include": ["next-env.d.ts", "css.d.ts", "**/*.ts", "**/*.tsx", "pages/booking/Reserve/index.tsx", "pages/upload2/index.tsx", "pages/api/upload.js", "pages/api/upload.js", "pages/upload.js", "pages/upload111.js", "pages/reservations/index.js", "pages/api/test.ts", "components/AdminSidebar.js", "pages/api/admin/holidays/delete.js", "pages/api/admin/tournament/listTournament", "pages/admin/backend/booking/buffet/test1.jsx", "pages/admin/backend/booking/buffet/test.js", "pages/admin/backend/booking/buffet/test.js", "pages/admin/backend/booking/buffet/colums.js", "pages/api/auth/[...nextauth].js", "pages/admin/backend/booking/buffet/columsLeft.tsx", "pages/api/admin/dailySum", "dev.js"],
   "exclude": ["node_modules"]
 }
