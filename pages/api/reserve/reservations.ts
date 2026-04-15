@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/db/db';
+import { sanitizeReservationPriceForMysql } from '@/lib/reservationPrice';
 import { mapRowsUsedateForClient, normalizeUsedateForMysql } from '@/lib/reserveUsedate';
 
 
@@ -39,6 +40,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           res.status(400).json({ message: 'Invalid usedate' });
           return;
         }
+        const priceMysql = sanitizeReservationPriceForMysql(price);
+        if (!priceMysql) {
+          res.status(400).json({ message: 'Invalid price' });
+          return;
+        }
         const insertQuery = `
         INSERT INTO reserve (name, phone, court_id, time_slot_id, start_time, end_time, usedate, price)
         SELECT ?, ?, ?, ?, ?, ?, ?, ?
@@ -54,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         `;
         
         const params = [
-          name, phone, court_id, time_slot_id, startvalue, endvalue, usedateMysql, price,
+          name, phone, court_id, time_slot_id, startvalue, endvalue, usedateMysql, priceMysql,
           court_id, usedateMysql, startvalue, endvalue
         ];
         

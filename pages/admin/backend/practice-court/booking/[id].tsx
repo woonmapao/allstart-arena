@@ -223,7 +223,7 @@ function ReserveBadmintonCourt({ timeSlots, courts, timeZone }: Props,) {
 
     if (startIndex >= 0 && endIndex >= 0) {
       for (let i = startIndex; i <= endIndex; i++) {
-        totalPrice += timeSlots[i].price;
+        totalPrice += Number(timeSlots[i].price);
       }
     }
 
